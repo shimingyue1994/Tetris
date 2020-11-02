@@ -515,11 +515,15 @@ int ifMove(struct Tetris* tetris) {
 		//符合条件 可以移动
 		if (
 			/*田字格:当田字图案要放置的4个方块的位置皆没有图案是则这个田字格图案可以移动*/
-			(tetris->flag == 1 && (a[tetris->x][tetris->y - 1] == 0 &&
-				a[tetris->x + 2][tetris->y - 1] == 0 && a[tetris->x + 2][tetris->y] == 0)) ||
+			(tetris->flag == 1 && (
+				a[tetris->x][tetris->y - 1] == 0 &&
+				a[tetris->x + 2][tetris->y - 1] == 0 &&
+				a[tetris->x + 2][tetris->y] == 0)) ||
 			/*直线方块：判断其余三个位置的是否有图案*/
-			(tetris->flag == 2 && (a[tetris->x - 2][tetris->y] == 0 &&
-				a[tetris->x + 2][tetris->y] == 0 && a[tetris->x + 4][tetris->y] == 0)) ||
+			(tetris->flag == 2 && (
+				a[tetris->x - 2][tetris->y] == 0 &&
+				a[tetris->x + 2][tetris->y] == 0 &&
+				a[tetris->x + 4][tetris->y] == 0)) ||
 			/*直线方块 竖着的*/
 			(tetris->flag == 3 && (
 				a[tetris->x][tetris->y - 1] == 0 &&
@@ -612,6 +616,100 @@ int ifMove(struct Tetris* tetris) {
 	}
 	return 0;
 }
+/// <summary>
+/// 清除方块的痕迹
+/// </summary>
+/// <param name="tetris"></param>
+void CleanTetris(struct Tetris *tetris) {
+	for (i = 0; i < 4; i++)
+	{
+		b[i] = 0;//0表示没有方块
+	}
+	MakeTetris(tetris);//重置数组b中方块元素的值为0，以便下面的代码执行清除操作
+	//循环方块可能出现的所有位置并绘制出来，MakeTetris可以看出方块的范围是 x-2 <= x <= x+4    y-2 <= y <= y+1
+	for (i = tetris->x - 2; i <= tetris->x + 4; i += 2) {
+		for (j = tetris->y - 2; j <= tetris->y + 1; j++) {
+			if (a[i][j]==0&&j>FrameY)
+			{
+				gotoxy(i,j);
+				printf("  ");//2个空格相当于一个字符
+			}
+		}
+	}
+}
+
+/// <summary>
+/// 判断方块是否满行并删除满行的方块
+/// </summary>
+/// <param name="tetris"></param>
+void Del_Fullline(struct Tetris* tetris) {
+	int k, del_rows = 0;
+	for (j = FrameY + Frame_height - 1; j >=FrameY+1 ; j--)//纵（y）轴，从下往上
+	{
+		k = 0;
+		//横轴 从左往右 宽度 布局2 是因为在横轴上 方块字符占2个字符
+		for (i = FrameX+2; i < FrameX + 2*Frame_height -2; i+=2)
+		{
+			if (a[i][j]==1)//这一行有方块
+			{
+				k++;
+				if (k==Frame_width -2)//判断这一行是否填满
+				{
+					// 如果满行 开始删除这一行
+					for (k = FrameX + 2; k < FrameX + 2 * Frame_height - 2; k += 2)
+					{
+						a[k][j] = 0;
+						gotoxy(k,j);
+						printf("  ");
+					}
+
+					//删除的这一行的上方有方块则执行方块下移操作
+					for ( k = j-1; k >FrameY ; k--)//y轴
+					{
+						for (i = FrameX + 2; i < FrameX + 2 * Frame_height - 2; i += 2)//x轴
+						{
+							if (a[i][k]==1)
+							{
+								//删除方块
+								a[i][k] = 0;
+								gotoxy(i, k);
+								printf("  ");
+								//在下方重新绘制一个
+								a[i][k + 1] = 1;
+								gotoxy(i, k+1);
+								printf("■");
+							}
+						}
+					}
+					j++;//方块下移动后，重新判断删除的行是否满行
+					del_rows++;//记录删除的行数，统计分数
+				}
+			}
+		}
+	}
+	//打印分数
+	tetris->score += 100 * del_rows;//每删除一行 加100
+	if (del_rows >0 &&(tetris->score%1000==0|| tetris->score / 1000 >tetris->level-1))
+	{//如果得分1000 速度加快20ms并升一级
+		tetris->speed -= 20;
+		tetris->level++;
+	}
+}
+/// <summary>
+/// 随机产生方块的序号
+/// </summary>
+/// <param name="tetris"></param>
+void Flag(struct Tetris *tetris) {
+	tetris->number++;//记住产生方块的个数
+	srand(time(NULL));//初始化随机数
+	if (tetris->number==1)
+	{
+		tetris->flag = rand()%19 +1;
+	}
+	tetris->next = rand() % 19 + 1;//记住下一个方块的序号
+}
+
+
 int main()
 {
 	title();
