@@ -16,7 +16,7 @@
 #define Frame_width 18
 
 
-int i, j, Temp, Temp1, Temp2;
+int i, j, Temp, Temp1, Temp2;//temp,temp1,temp2用于记住和转换方块变量的值
 //屏幕图案数组，整个区域被分割成80*80的分割块，下面的逻辑就是向这个方格纸里填充方块
 int a[80][80];
 int b[4];
@@ -133,27 +133,84 @@ void title() {
 	printf("■■■");//■■■
 }
 
-/*绘制字符花,代码太多了 */
-void flower() {
-	gotoxy(66, 11);
-	color(12);
-	printf("(_)");
+/**
+ * 绘制字符花
+ */
+void flower()
+{
+	gotoxy(66, 11);   	//确定屏幕上要输出的位置
+	color(12);			//设置颜色
+	printf("(_)");  		//红花上边花瓣
 
 	gotoxy(64, 12);
-	printf("(_)");
+	printf("(_)");      //红花左边花瓣
 
 	gotoxy(68, 12);
-	printf("(_)");
+	printf("(_)");      //红花右边花瓣
 
 	gotoxy(66, 13);
-	printf("(_)");
+	printf("(_)");      //红花下边花瓣
 
-	gotoxy(67, 12);
+	gotoxy(67, 12);      //红花花蕊
 	color(6);
 	printf("@");
 
+	gotoxy(72, 10);
+	color(13);
+	printf("(_)");      //粉花左边花瓣
 
+	gotoxy(76, 10);
+	printf("(_)");      //粉花右边花瓣
+
+	gotoxy(74, 9);
+	printf("(_)");      //粉花上边花瓣
+
+	gotoxy(74, 11);
+	printf("(_)");      //粉花下边花瓣
+
+	gotoxy(75, 10);
+	color(6);
+	printf("@");        //粉花花蕊
+
+	gotoxy(71, 12);
+	printf("|");      	//两朵花之间的连接
+
+	gotoxy(72, 11);
+	printf("/");      	//两朵花之间的连接
+
+	gotoxy(70, 13);
+	printf("\\|");     //注意、\为转义字符。想要输入\，必须在前面需要转义
+
+	gotoxy(70, 14);
+	printf("`|/");
+
+	gotoxy(70, 15);
+	printf("\\|");
+
+	gotoxy(71, 16);
+	printf("| /");
+
+	gotoxy(71, 17);
+	printf("|");
+
+	gotoxy(67, 17);
+	color(10);
+	printf("\\\\\\\\");      //草地
+	gotoxy(73, 17);
+	printf("//");
+
+	gotoxy(67, 18);
+	color(2);
+	printf("^^^^^^^^");
+
+	gotoxy(65, 19);
+	color(5);
+	printf("明 日  科 技");	//公司名称
+
+	gotoxy(68, 20);
+	printf("周小美");			//开发者的名字，读者练习时，可以换成自己的名字
 }
+
 
 
 /// <summary>
@@ -203,310 +260,407 @@ void welcome() {
 	{
 	case 1://开始
 		system("cls");//这句代码用来清屏幕
-		DrwaGameframe();
+		DrwaGameframe(); //绘制窗体
+		Gameplay();//开始游戏
 		break;
 	case 2: //按键说明
-
+		explation();
 		break;
 	case 3://规则
-
+		regulation();
 		break;
 	case 4://退出
-
+		close();
 		break;
 	default:
 		break;
 	}
+}
+void close() {
+	exit(0);
+}
+/// <summary>
+/// 游戏规则
+/// </summary>
+void regulation() {
+	int i, j = 1;
+	system("cls");
+	color(13);
+	gotoxy(34, 3);
+	printf("游戏规则");
+	color(2);
+	for (i = 6; i <= 18; i++)   //输出上下边框===
+	{
+		for (j = 12; j <= 70; j++)  //输出左右边框||
+		{
+			gotoxy(j, i);
+			if (i == 6 || i == 18) printf("=");
+			else if (j == 12 || j == 69) printf("||");
+		}
+	}
+	color(12);
+	gotoxy(16, 7);
+	printf("tip1: 不同形状的小方块从屏幕上方落下，玩家通过调整");
+	gotoxy(22, 9);
+	printf("方块的位置和方向，使他们在屏幕底部拼出完整的");
+	gotoxy(22, 11);
+	printf("一条或几条");
+	color(14);
+	gotoxy(16, 13);
+	printf("tip2: 每消除一行，积分增加100");
+	color(11);
+	gotoxy(16, 15);
+	printf("tip3: 每累计1000分，会提升一个等级");
+	color(10);
+	gotoxy(16, 17);
+	printf("tip4: 提升等级会使方块下落速度加快，游戏难度加大");
+	_getch();                //按任意键返回主界面
+	system("cls");
+	welcome();
 
+}
+
+/**
+* 按键说明
+*/
+void explation()
+{
+	int i, j = 1;
+	system("cls");
+	color(13);
+	gotoxy(32, 3);
+	printf("按键说明");
+	color(2);
+	for (i = 6; i <= 16; i++)   //输出上下边框===
+	{
+		for (j = 15; j <= 60; j++)  //输出左右边框||
+		{
+			gotoxy(j, i);
+			if (i == 6 || i == 16) printf("=");
+			else if (j == 15 || j == 59) printf("||");
+		}
+	}
+	color(3);
+	gotoxy(18, 7);
+	printf("tip1: 玩家可以通过 ← →方向键来移动方块");
+	color(10);
+	gotoxy(18, 9);
+	printf("tip2: 通过 ↑使方块旋转");
+	color(14);
+	gotoxy(18, 11);
+	printf("tip3: 通过 ↓加速方块下落");
+	color(11);
+	gotoxy(18, 13);
+	printf("tip4: 按空格键暂停游戏，再按空格键继续");
+	color(4);
+	gotoxy(18, 15);
+	printf("tip5: 按ESC退出游戏");
+	_getch();                //按任意键返回主界面
+	system("cls");
+	welcome();
 }
 
 /*绘制主窗体，按键说明  方块的包裹区域*/
 void DrwaGameframe() {
-	/*标题*/
-	gotoxy(FrameX + Frame_width - 7, FrameY - 2);
-	color(11);//亮蓝
-	printf("趣味俄罗斯方块");
-
-	/*下一个方块出现的位置*/
-	gotoxy(FrameX + Frame_width * 2 + 3, FrameY + 7);
-	color(2);//深绿
-	printf("**********");
-	color(3);
-	printf("下一个方块：");
-
-	gotoxy(FrameX + Frame_width * 2 + 3, FrameY + 13);
-	color(2);//深绿
-	printf("**********");
-
-	/*主窗体按键说明*/
-	gotoxy(FrameX + Frame_width * 2 + 3, FrameY + 17);
-	color(14);//黄色
+	gotoxy(FrameX + Frame_width - 5, FrameY - 2);   				//设置游戏名称的显示位置
+	color(11);								//将字体颜色设置为亮蓝色
+	printf("趣味俄罗斯方块");						//打印游戏名称
+	gotoxy(FrameX + 2 * Frame_width + 3, FrameY + 7); 				//设置上边框的显示位置
+	color(2);								//将字体颜色设置为深绿色
+	printf("**********");							//打印下一个出现方块的上边框
+	gotoxy(FrameX + 2 * Frame_width + 13, FrameY + 7);
+	color(3);								//将字体颜色设置为深蓝绿色
+	printf("下一出现方块：");
+	gotoxy(FrameX + 2 * Frame_width + 3, FrameY + 13);
+	color(2);
+	printf("**********");							//打印下一个出现方块的下边框
+	gotoxy(FrameX + 2 * Frame_width + 3, FrameY + 17);
+	color(14);								//将字体颜色设置为黄色
 	printf("↑键：旋转");
-
-	gotoxy(FrameX + Frame_width * 2 + 3, FrameY + 19);
-	color(14);
+	gotoxy(FrameX + 2 * Frame_width + 3, FrameY + 19);
 	printf("空格：暂停游戏");
-
-	gotoxy(FrameX + Frame_width * 2 + 3, FrameY + 15);
-	color(14);
-	printf("Esc：退出游戏");
-
-
-	gotoxy(FrameX - 13, FrameY + Frame_height / 2);
-	color(6);
-	printf("边界区域→");
-	gotoxy(FrameX - 13, FrameY + Frame_height / 2 + 1);
-	printf("0：无方块");
-	gotoxy(FrameX - 13, FrameY + Frame_height / 2 + 2);
-	printf("1：有方块");
-	gotoxy(FrameX - 13, FrameY + Frame_height / 2 + 3);
-	printf("2：边界区域");
-	//开始绘制包含方块的边框
+	gotoxy(FrameX + 2 * Frame_width + 3, FrameY + 15);
+	printf("Esc ：退出游戏");
 	gotoxy(FrameX, FrameY);
-	color(12);//红色
-	printf(" ╭"); //打印框角
-	gotoxy(FrameX + Frame_width * 2 - 2, FrameY);
-	printf("╮ "); //打印框角
+	color(12);
+	printf("╔");									//打印框角
+	gotoxy(FrameX + 2 * Frame_width - 2, FrameY);
+	printf("╗");
 	gotoxy(FrameX, FrameY + Frame_height);
-	printf(" ╰"); //打印框角
-	gotoxy(FrameX + Frame_width * 2 - 2, FrameY + Frame_height);
-	printf("╯ "); //打印框角
+	printf("╚");
+	gotoxy(FrameX + 2 * Frame_width - 2, FrameY + Frame_height);
+	printf("╝");
 
 	a[FrameX][FrameY + Frame_height] = 2;//边界标记 左下角: 向这个数组里放个标记，用来判断方块是否出界，如果数组中元素等于“2”就是出界了
 	a[FrameX + 2 * Frame_width - 2][FrameY + Frame_height] = 2;//右下角
 
-	///上
-	for (i = 2; i < Frame_width * 2 - 2; i += 2)//打印上边框 每个制表符占两个字符
+	for (i = 2; i < 2 * Frame_width - 2; i += 2)
 	{
 		gotoxy(FrameX + i, FrameY);
-		printf("─");
+		printf("═");         						//打印上横框
 	}
-	//下
-	for (i = 2; i < Frame_width * 2 - 2; i += 2) //打印下边框
+	for (i = 2; i < 2 * Frame_width - 2; i += 2)
 	{
 		gotoxy(FrameX + i, FrameY + Frame_height);
-		printf("─");
-		a[FrameX + i][FrameY + Frame_height] = 2;//打上边界标记
+		printf("═");         						//打印下横框
+		a[FrameX + i][FrameY + Frame_height] = 2;    	//标记下横框为游戏边框，防止方块出界
 	}
-
-	//左
-	for (i = 1; i < Frame_height; i++) //打印左边框 竖着的方向无论中英文都是2个字符大小的距离
+	for (i = 1; i < Frame_height; i++)
 	{
-
 		gotoxy(FrameX, FrameY + i);
-		printf(" |");
-		a[FrameX][FrameY + i] = 2;//打上左边界标记
+		printf("║");        	 					//打印左竖框
+		a[FrameX][FrameY + i] = 2;       			//标记左竖框为游戏边框，防止方块出界
 	}
-
-	//右
-	for (i = 1; i < Frame_height; i++) //打印右边框 竖着的方向无论中英文都是2个字符大小的距离
+	for (i = 1; i < Frame_height; i++)
 	{
 		gotoxy(FrameX + 2 * Frame_width - 2, FrameY + i);
-		printf(" |");
-		a[FrameX + 2 * Frame_width - 2][FrameY + i] = 2;//打上右边界标记
+		printf("║");         						 //打印右竖框
+		a[FrameX + 2 * Frame_width - 2][FrameY + i] = 2;   //标记右竖框为游戏边框，防止方块出界	
 	}
-
-
-	printf("\n\n");
 }
 
 /// <summary>
 ///根据传进来的方块结构绘制方块,主要定义方块位置
 /// </summary>
 /// <param name=""></param>
-void MakeTetris(struct Tetris* tetris) {
-	a[tetris->x][tetris->y] = b[0];//中心方块的图形状态，就是第一个“■”的位置，根据他的位置绘制其他方块的位置
-	switch (tetris->flag)//根据类型返回不同的方块
+/**
+ * 制作俄罗斯方块
+ */
+void MakeTetris(struct Tetris* tetris)
+{
+	a[tetris->x][tetris->y] = b[0];    	//初始化中心方块位置的图形状态,就是第一个“■”的位置，然后根据它绘制其他三个
+	switch (tetris->flag)      				//共7大类，19种类型
 	{
-	case 1: {/*田字方块 ■■
-					   ■■*/
-		color(10);//黄色
+	case 1:         /*田字方块 ■■
+								■■  */
+	{
+		color(10);
 		a[tetris->x][tetris->y - 1] = b[1];
 		a[tetris->x + 2][tetris->y - 1] = b[2];
 		a[tetris->x + 2][tetris->y] = b[3];
 		break;
 	}
-	case 2: {/*直线方块 横着的*/
-		color(13);//粉色
+	case 2:         /*直线方块 ■■■■*/
+	{
+		color(13);
 		a[tetris->x - 2][tetris->y] = b[1];
 		a[tetris->x + 2][tetris->y] = b[2];
 		a[tetris->x + 4][tetris->y] = b[3];
 		break;
 	}
-	case 3: {/*直线方块 竖着的*/
-		color(13);//粉色
+	case 3:         /*直线方块    ■
+								 ■
+								 ■
+								 ■  */
+	{
+		color(13);
 		a[tetris->x][tetris->y - 1] = b[1];
 		a[tetris->x][tetris->y - 2] = b[2];
 		a[tetris->x][tetris->y + 1] = b[3];
 		break;
 	}
-	case 4: {/*T字方块*/
-		color(11);//白色
+	case 4:         /*T字方块 ■■■
+							   ■  */
+	{
+		color(11);
 		a[tetris->x - 2][tetris->y] = b[1];
 		a[tetris->x + 2][tetris->y] = b[2];
 		a[tetris->x][tetris->y + 1] = b[3];
 		break;
 	}
-	case 5: {/*T字方块 顺时针90度*/
-		color(11);//白色
+	case 5:         /* 顺时针90°T字方块   ■
+										 ■■
+										   ■*/
+	{
+		color(11);
 		a[tetris->x][tetris->y - 1] = b[1];
 		a[tetris->x][tetris->y + 1] = b[2];
 		a[tetris->x - 2][tetris->y] = b[3];
 		break;
 	}
-	case 6: {/*T字方块 顺时针180度*/
-		color(11);//白色
+	case 6:         /* 顺时针180°T字方块   ■
+										  ■■■*/
+	{
+		color(11);
 		a[tetris->x][tetris->y - 1] = b[1];
 		a[tetris->x - 2][tetris->y] = b[2];
 		a[tetris->x + 2][tetris->y] = b[3];
 		break;
 	}
-	case 7: {/*T字方块 顺时针270度*/
-		color(11);//白色
+	case 7:         /* 顺时针270°T字方块 ■
+										  ■■
+										  ■  */
+	{
+		color(11);
 		a[tetris->x][tetris->y - 1] = b[1];
 		a[tetris->x][tetris->y + 1] = b[2];
 		a[tetris->x + 2][tetris->y] = b[3];
 		break;
 	}
-	case 8: {/*z字方块*/
-		color(14);//另一种黄色
+	case 8:         /* Z字方块  ■■
+								   ■■*/
+	{
+		color(14);
 		a[tetris->x][tetris->y + 1] = b[1];
 		a[tetris->x - 2][tetris->y] = b[2];
 		a[tetris->x + 2][tetris->y + 1] = b[3];
 		break;
 	}
-	case 9: {/*z字方块 顺时针*/
-		color(14);//另一种黄色
+	case 9:         /* 顺时针Z字方块   ■
+									  ■■
+									  ■  */
+	{
+		color(14);
 		a[tetris->x][tetris->y - 1] = b[1];
 		a[tetris->x - 2][tetris->y] = b[2];
 		a[tetris->x - 2][tetris->y + 1] = b[3];
 		break;
 	}
-
-	case 10: {/*反z字方块*/
-		color(14);//另一种黄色
+	case 10:        /* 反转Z字方块    ■■
+									 ■■  */
+	{
+		color(14);
 		a[tetris->x][tetris->y - 1] = b[1];
 		a[tetris->x - 2][tetris->y - 1] = b[2];
 		a[tetris->x + 2][tetris->y] = b[3];
 		break;
 	}
-
-	case 11: {/*反z字方块 顺时针*/
-		color(14);//另一种黄色
+	case 11:        /* 顺时针Z字方块 ■
+									  ■■
+										■  */
+	{
+		color(14);
 		a[tetris->x][tetris->y + 1] = b[1];
 		a[tetris->x - 2][tetris->y - 1] = b[2];
 		a[tetris->x - 2][tetris->y] = b[3];
 		break;
 	}
-	case 12: {/*7字形方块*/
-		color(12);//另一种红色
+	case 12:        /* 7字方块    ■■
+									 ■
+									 ■ */
+	{
+		color(12);
 		a[tetris->x][tetris->y - 1] = b[1];
 		a[tetris->x][tetris->y + 1] = b[2];
 		a[tetris->x - 2][tetris->y - 1] = b[3];
 		break;
 	}
-	case 13: {/*7字形方块 顺时针90度*/
-		color(12);//另一种红色
+	case 13:        /* 顺时针90°7字方块      ■
+										  ■■■  */
+	{
+		color(12);
 		a[tetris->x - 2][tetris->y] = b[1];
 		a[tetris->x + 2][tetris->y - 1] = b[2];
 		a[tetris->x + 2][tetris->y] = b[3];
 		break;
 	}
-	case 14: {/*7字形方块 顺时针180度*/
-		color(12);//另一种红色
+	case 14:        /* 顺时针180°7字方块   ■
+											■
+											■■  */
+	{
+		color(12);
 		a[tetris->x][tetris->y - 1] = b[1];
 		a[tetris->x][tetris->y + 1] = b[2];
 		a[tetris->x + 2][tetris->y + 1] = b[3];
 		break;
 	}
-	case 15: {/*7字形方块 顺时针270度*/
-		color(12);//另一种红色
+	case 15:        /* 顺时针270°7字方块   ■■■
+											■    */
+	{
+		color(12);
 		a[tetris->x - 2][tetris->y] = b[1];
 		a[tetris->x - 2][tetris->y + 1] = b[2];
 		a[tetris->x + 2][tetris->y] = b[3];
 		break;
 	}
-	case 16: {/*反7字方块*/
-		color(12);//另一种红色
+	case 16:        /* 反转7字方块   ■■
+									  ■
+										 ■    */
+	{
+		color(12);
 		a[tetris->x][tetris->y + 1] = b[1];
 		a[tetris->x][tetris->y - 1] = b[2];
 		a[tetris->x + 2][tetris->y - 1] = b[3];
 		break;
 	}
-	case 17: {/*反7字方块 顺时针90度*/
-		color(12);//另一种红色
+	case 17:        /* 顺时针转90°7字方块   ■■■
+												 ■*/
+	{
+		color(12);
 		a[tetris->x - 2][tetris->y] = b[1];
 		a[tetris->x + 2][tetris->y + 1] = b[2];
 		a[tetris->x + 2][tetris->y] = b[3];
 		break;
 	}
-	case 18: {/*反7字方块 顺时针180度*/
-		color(12);//另一种红色
+	case 18:        /* 顺时针转180°7字方块  ■
+											  ■
+											■■    */
+	{
+		color(12);
 		a[tetris->x][tetris->y - 1] = b[1];
 		a[tetris->x][tetris->y + 1] = b[2];
 		a[tetris->x - 2][tetris->y + 1] = b[3];
 		break;
 	}
-	case 19: {
-		color(12);//另一种红色
+	case 19:        /* 顺指针转270°7字方块  ■
+											 ■■■*/
+	{
+		color(12);
 		a[tetris->x - 2][tetris->y] = b[1];
 		a[tetris->x - 2][tetris->y - 1] = b[2];
 		a[tetris->x + 2][tetris->y] = b[3];
 		break;
 	}
-
-	default:
-		break;
 	}
 }
+
 /// <summary>
 /// 将方块打印在屏幕上
 /// </summary>
 /// <param name="tetris"></param>
-void PrintTetris(struct Tetris* tetris) {
-	for (i = 0; i < 4; i++)
+
+void PrintTetris(struct Tetris* tetris)
+{
+	for (i = 0; i < 4; i++)					//数组b[4]中有4个元素，循环这4个元素，让每个元素的值都为
 	{
-		b[i] = 1;//1表示有方块
+		b[i] = 1;         				//数组b[4]的每个元素的值都为1
 	}
-	MakeTetris(tetris);
-	//循环方块可能出现的所有位置并绘制出来，MakeTetris可以看出方块的范围是 x-2 <= x <= x+4    y-2 <= y <= y+1
-	for (i = tetris->x - 2; i <= tetris->x + 4; i += 2) {
-		for (j = tetris->y - 2; j <= tetris->y + 1; j++) {
-			if (a[i][j] == 1 && j > FrameY)
+	MakeTetris(tetris);      			//制作游戏窗口
+	for (i = tetris->x - 2; i <= tetris->x + 4; i += 2)
+	{
+		for (j = tetris->y - 2; j <= tetris->y + 1; j++)	//循环方块所有可能出现的位置
+		{
+			if (a[i][j] == 1 && j > FrameY) 		//如果这个位置上有方块
 			{
 				gotoxy(i, j);
-				printf("■");
+				printf("■");     					//打印边框内的方块
 			}
 		}
 	}
-
 	//打印菜单信息
-	gotoxy(FrameX + FrameX * 2 + 3, FrameY + 1);
-	color(4);//暗红色
-	printf("level：");
-	color(12);//亮红色
-	printf("%d", tetris->level);
-
-	//打印分数
-	gotoxy(FrameX + FrameX * 2 + 3, FrameY + 3);
-	color(4);//暗红色
-	printf("score：");
-	color(12);//亮红色
-	printf("%d", tetris->score);
-
-	//打印速度
-	gotoxy(FrameX + FrameX * 2 + 3, FrameY + 5);
-	color(4);//暗红色
-	printf("speed：");
-	color(12);//亮红色
-	printf("%d", tetris->speed);
+	gotoxy(FrameX + 2 * Frame_width + 3, FrameY + 1); 	//设置打印位置
+	color(4);
+	printf("level : ");
+	color(12);
+	printf(" %d", tetris->level); 					//输出等级
+	gotoxy(FrameX + 2 * Frame_width + 3, FrameY + 3);
+	color(4);
+	printf("score : ");
+	color(12);
+	printf(" %d", tetris->score); 					//输出分数
+	gotoxy(FrameX + 2 * Frame_width + 3, FrameY + 5);
+	color(4);
+	printf("speed : ");
+	color(12);
+	printf(" %dms", tetris->speed); 			//输出速度
 }
 /// <summary>
 /// 判断方块是否可以移动，判断周围是否是墙壁或者有其他方块
 /// </summary>
 /// <param name=""></param>
 int ifMove(struct Tetris* tetris) {
-	if (a[tetris->x][tetris->y] != 0)//中心的方块上在方格纸上已经有方块了，此时下落的方块不可移动
+	//中心的方块上在方格纸上已经有方块了，此时下落的方块不可移动
+	if (a[tetris->x][tetris->y] != 0)
 	{
 		return 0;
 	}
@@ -620,7 +774,7 @@ int ifMove(struct Tetris* tetris) {
 /// 清除方块的痕迹
 /// </summary>
 /// <param name="tetris"></param>
-void CleanTetris(struct Tetris *tetris) {
+void CleanTetris(struct Tetris* tetris) {
 	for (i = 0; i < 4; i++)
 	{
 		b[i] = 0;//0表示没有方块
@@ -629,9 +783,9 @@ void CleanTetris(struct Tetris *tetris) {
 	//循环方块可能出现的所有位置并绘制出来，MakeTetris可以看出方块的范围是 x-2 <= x <= x+4    y-2 <= y <= y+1
 	for (i = tetris->x - 2; i <= tetris->x + 4; i += 2) {
 		for (j = tetris->y - 2; j <= tetris->y + 1; j++) {
-			if (a[i][j]==0&&j>FrameY)
+			if (a[i][j] == 0 && j > FrameY)
 			{
-				gotoxy(i,j);
+				gotoxy(i, j);
 				printf("  ");//2个空格相当于一个字符
 			}
 		}
@@ -644,31 +798,31 @@ void CleanTetris(struct Tetris *tetris) {
 /// <param name="tetris"></param>
 void Del_Fullline(struct Tetris* tetris) {
 	int k, del_rows = 0;
-	for (j = FrameY + Frame_height - 1; j >=FrameY+1 ; j--)//纵（y）轴，从下往上
+	for (j = FrameY + Frame_height - 1; j >= FrameY + 1; j--)//纵（y）轴，从下往上
 	{
 		k = 0;
 		//横轴 从左往右 宽度 布局2 是因为在横轴上 方块字符占2个字符
-		for (i = FrameX+2; i < FrameX + 2*Frame_height -2; i+=2)
+		for (i = FrameX + 2; i < FrameX + 2 * Frame_height - 2; i += 2)
 		{
-			if (a[i][j]==1)//这一行有方块
+			if (a[i][j] == 1)//这一行有方块
 			{
 				k++;
-				if (k==Frame_width -2)//判断这一行是否填满
+				if (k == Frame_width - 2)//判断这一行是否填满
 				{
 					// 如果满行 开始删除这一行
 					for (k = FrameX + 2; k < FrameX + 2 * Frame_height - 2; k += 2)
 					{
 						a[k][j] = 0;
-						gotoxy(k,j);
+						gotoxy(k, j);
 						printf("  ");
 					}
 
 					//删除的这一行的上方有方块则执行方块下移操作
-					for ( k = j-1; k >FrameY ; k--)//y轴
+					for (k = j - 1; k > FrameY; k--)//y轴
 					{
 						for (i = FrameX + 2; i < FrameX + 2 * Frame_height - 2; i += 2)//x轴
 						{
-							if (a[i][k]==1)
+							if (a[i][k] == 1)
 							{
 								//删除方块
 								a[i][k] = 0;
@@ -676,7 +830,7 @@ void Del_Fullline(struct Tetris* tetris) {
 								printf("  ");
 								//在下方重新绘制一个
 								a[i][k + 1] = 1;
-								gotoxy(i, k+1);
+								gotoxy(i, k + 1);
 								printf("■");
 							}
 						}
@@ -689,7 +843,7 @@ void Del_Fullline(struct Tetris* tetris) {
 	}
 	//打印分数
 	tetris->score += 100 * del_rows;//每删除一行 加100
-	if (del_rows >0 &&(tetris->score%1000==0|| tetris->score / 1000 >tetris->level-1))
+	if (del_rows > 0 && (tetris->score % 1000 == 0 || tetris->score / 1000 > tetris->level - 1))
 	{//如果得分1000 速度加快20ms并升一级
 		tetris->speed -= 20;
 		tetris->level++;
@@ -699,19 +853,212 @@ void Del_Fullline(struct Tetris* tetris) {
 /// 随机产生方块的序号
 /// </summary>
 /// <param name="tetris"></param>
-void Flag(struct Tetris *tetris) {
+void Flag(struct Tetris* tetris) {
 	tetris->number++;//记住产生方块的个数
 	srand(time(NULL));//初始化随机数
-	if (tetris->number==1)
+	//只有第一个方块才随机产生flag,后面来的都使用next 来赋值，然后再产生新的next,已达到和预览窗口相同
+	if (tetris->number == 1) 
 	{
-		tetris->flag = rand()%19 +1;
+		tetris->flag = rand() % 19 + 1;
 	}
 	tetris->next = rand() % 19 + 1;//记住下一个方块的序号
 }
+/// <summary>
+/// 重新开始
+/// </summary>
+/// <param name="tetris"></param>
+void Replay(struct Tetris*)
+{
+	system("cls");                  	//清屏
+	memset(a, 0, 6400 * sizeof(int));       //初始化BOX数组，否则不会正常显示方块，导致游戏直接结束
+	DrwaGameframe();       	//制作游戏窗口
+	Gameplay(); 			//开始游戏
+}
+/**
+ * 开始游戏
+ */
+void Gameplay()
+{
+	int n;
+	struct Tetris t, * tetris = &t;       					//定义结构体的指针并指向结构体变量
+	char ch;         									//定义接收键盘输入的变量
+	tetris->number = 0;      								//初始化俄罗斯方块数为0个
+	tetris->speed = 300;      							//初始移动速度为300ms
+	tetris->score = 0;      								//初始游戏的分数为0分
+	tetris->level = 1;      								//初始游戏为第1关
+	while (1)											//循环产生方块，直至游戏结束
+	{
+		Flag(tetris);     								//得到产生俄罗斯方块类型的序号
+		Temp = tetris->flag;     							//临时变量：记住当前俄罗斯方块序号，以便后面的还原
+		tetris->x = FrameX + 2 * Frame_width + 6;				//获得预览界面方块的x坐标，预览界面就是右下角那个（*********下一个方块）的位置
+		tetris->y = FrameY + 10;                            //获得预览界面方块的y坐标
+		tetris->flag = tetris->next;                    //获得下一个俄罗斯方块的序号，现将下一个要显示的方块打印在预览窗口
+		PrintTetris(tetris);                           //调用打印俄罗斯方块方法 打印预览方块
+		//开始打印此时下落的方块
+		tetris->x = FrameX + Frame_width;  					//获得游戏窗口中心方块x坐标
+		tetris->y = FrameY - 1;     						//获得游戏窗口中心方块y坐标
+		tetris->flag = Temp;     							//取出当前的俄罗斯方块序号 将序号还原
+		///方块下落的循环体
+		while (1)  										//控制方块方向，直至方块不再下移
+		{
+		label:PrintTetris(tetris);					//打印俄罗斯方块
+			Sleep(tetris->speed);   					//延缓时间
+			CleanTetris(tetris);  						//清除痕迹，后面会在新的位置重新绘制
+			Temp1 = tetris->x;    						//记住中心方块横坐标的值
+			Temp2 = tetris->flag;    						//记住当前俄罗斯方块序号
+			if (_kbhit())       				  	 		//判断是否有键盘输入，有则用ch↓接收
+			{
+				ch = _getch();
+				if (ch == 75)     							//按 ←键则向左动，中心横坐标减2
+				{
+					tetris->x -= 2;
+				}
+				if (ch == 77)     							//按 →键则向右动，中心横坐标加2
+				{
+					tetris->x += 2;
+				}
+				if (ch == 80)     							//按 ↓键则加速下落
+				{
+					if (ifMove(tetris) != 0)//可以向下移动
+					{
+						tetris->y += 2;
+					}
+					if (ifMove(tetris) == 0)//不可以向下移动了
+					{
+						tetris->y = FrameY + Frame_height - 2;
+					}
+				}
+				if (ch == 72)     						//按 ↑键则变体,即当前方块顺时针转90度
+				{
+					if (tetris->flag >= 2 && tetris->flag <= 3)
+					{
+						tetris->flag++;
+						tetris->flag %= 2;
+						tetris->flag += 2;
+					}
+					if (tetris->flag >= 4 && tetris->flag <= 7)
+					{
+						tetris->flag++;
+						tetris->flag %= 4;
+						tetris->flag += 4;
+					}
+					if (tetris->flag >= 8 && tetris->flag <= 11)
+					{
+						tetris->flag++;
+						tetris->flag %= 4;
+						tetris->flag += 8;
+					}
+					if (tetris->flag >= 12 && tetris->flag <= 15)
+					{
+						tetris->flag++;
+						tetris->flag %= 4;
+						tetris->flag += 12;
+					}
+					if (tetris->flag >= 16 && tetris->flag <= 19)
+					{
+						tetris->flag++;
+						tetris->flag %= 4;
+						tetris->flag += 16;
+					}
+				}
+				if (ch == 32)     					//按空格键，暂停
+				{
+					PrintTetris(tetris);
+					while (1)
+					{
+						if (_kbhit())   			//再按空格键，继续游戏
+						{
+							ch = _getch();
+							if (ch == 32)
+							{
+								goto label;
+							}
+						}
+					}
+				}
+				if (ch == 27) //esc 退出游戏，返回欢迎页，在这里重置变量
+				{
+					system("cls");
+					memset(a, 0, 6400 * sizeof(int));       //初始化BOX数组
+					welcome();
+				}
+				if (ifMove(tetris) == 0) 			//如果不可动，上面操作无效
+				{
+					tetris->x = Temp1;
+					tetris->flag = Temp2;
+				}
+				else      						//如果可动，执行操作 又一次重新绘制
+				{
+					goto label;
+				}
+			}//按键逻辑 end
 
-
+			//如果没有操作指令，方块自动向下移动
+			tetris->y++;     					
+			//如果向下移动且不可动，方块放在此处，并调用break 结束下落循环体,开始下一个方块的下落
+			if (ifMove(tetris) == 0)  				
+			{
+				tetris->y--;
+				PrintTetris(tetris);
+				Del_Fullline(tetris);//判断满行，然后删除
+				break;//结束下落的循环体
+			}
+		}//方块下落循环逻辑end
+		//游戏结束条件：方块触到框顶位置
+		for (i = tetris->y - 2; i < tetris->y + 2; i++)	
+		{
+			if (i == FrameY)
+			{
+				system("cls");
+				gotoxy(29, 7);
+				printf("   \n");
+				color(12);
+				printf("\t\t\t■■■■   ■     ■   ■■     \n");
+				printf("\t\t\t■         ■■   ■   ■  ■   \n");
+				printf("\t\t\t■■■     ■  ■ ■   ■   ■  \n");
+				printf("\t\t\t■         ■   ■■   ■  ■   \n");
+				printf("\t\t\t■■■■   ■     ■   ■■     \n");
+				gotoxy(17, 18);
+				color(14);
+				printf("我要重新玩一局-------1");
+				gotoxy(44, 18);
+				printf("不玩了，退出吧-------2\n");
+				gotoxy(32, 20);
+				printf("选择【1/2】：");
+				color(11);
+				scanf_s("%d", &n);
+				switch (n)
+				{
+				case 1:
+					system("cls");
+					//Replay(tetris);       	//重新开始游戏
+					break;
+				case 2:
+					exit(0);
+					break;
+				}
+			}
+		}
+		//清除下一个俄罗斯方块的图形(右边窗口),并将flag赋值为下一个方块的序号
+		tetris->flag = tetris->next;  			
+		tetris->x = FrameX + 2 * Frame_width + 6;
+		tetris->y = FrameY + 10;
+		CleanTetris(tetris);
+	}
+}
 int main()
 {
+	//for (;;) 
+	//{
+	//	if (_kbhit()) 
+	//	{
+	//		//getch()获取键盘输入，并将ascii码的值返回,当没有键盘输入时，代码不会往后执行，读取到键盘输入，则继续往下执行
+	//		char ch = _getch();
+	//		printf("%c\n",ch);//输出按键
+	//		printf("%d",ch);//输出按键对应的ascii码
+	//	}
+	//}
+
 	title();
 	flower();
 	welcome();
